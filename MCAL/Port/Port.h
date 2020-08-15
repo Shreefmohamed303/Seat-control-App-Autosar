@@ -172,75 +172,9 @@ void Port_GetVersionInfo(Std_VersionInfoType* versioninfo);
 /* Function Declaration for PORTset pin mode API */
 void Port_SetPinMode(Port_PinType Pin, Port_PinModeType Mode);
 
-/*********************************************************************************
- * 						PIN Definitions 										 *
- ********************************************************************************/
-
-#define PORTA_ID					(0U)
-#define PORTB_ID					(1U)
-#define PORTC_ID					(2U)
-#define PORTD_ID					(3U)
-
-#define PORT_PIN0 					(Port_PinType)0
-#define PORT_PIN1 					(Port_PinType)1
-#define PORT_PIN2 					(Port_PinType)2
-#define PORT_PIN3 					(Port_PinType)3
-#define PORT_PIN4 					(Port_PinType)4
-#define PORT_PIN5 					(Port_PinType)5
-#define PORT_PIN6 					(Port_PinType)6
-#define PORT_PIN7 					(Port_PinType)7
-
-#define PINS_NUM					(32U)
-#define NUMBER_OF_PINS_PER_PORT		(8U)
-#define NUMBER_OF_PORTS				(4U)
-
-//#define PORT_A_FIRST_ID				(0U)
-//#define PORT_A_LAST_ID				(7U)
-//
-//#define PORT_B						(1U)
-//#define PORT_B_FIRST_ID				(8U)
-//#define PORT_B_LAST_ID				(15U)
-//
-//#define PORT_C						(2U)
-//#define PORT_C_FIRST_ID				(16U)
-//#define PORT_C_LAST_ID				(23U)
-
-#define PORT_D						(3U)
-#define PORT_D_FIRST_ID				(24U)
-#define PORT_D_LAST_ID				(31U)
-
-#define PIN_0						(0U)//A
-#define PIN_1						(1U)
-#define PIN_2						(2U)
-#define PIN_3						(3U)
-#define PIN_4						(4U)
-#define PIN_5						(5U)
-#define PIN_6						(6U)
-#define PIN_7						(7U)
-#define PIN_8						(8U)//B
-#define PIN_9						(9U)
-#define PIN_10						(10U)
-#define PIN_11						(11U)
-#define PIN_12						(12U)
-#define PIN_13						(13U)
-#define PIN_14						(14U)
-#define PIN_15						(15U)
-#define PIN_16						(16U)//c
-#define PIN_17						(17U)
-#define PIN_18						(18U)
-#define PIN_19						(19U)
-#define PIN_20						(20U)
-#define PIN_21						(21U)
-#define PIN_22						(22U)
-#define PIN_23						(23U)
-#define PIN_24						(24U)//D
-#define PIN_25						(25U)
-#define PIN_26						(26U)
-#define PIN_27						(27U)
-#define PIN_28						(28U)
-#define PIN_29						(29U)
-#define PIN_30						(30U)
-#define PIN_31						(31U)
-
+/*******************************************************************************
+ *                       External Variables                                    *
+ *******************************************************************************/
+ extern const Port_ConfigType Port_Configurations;
 
 #endif

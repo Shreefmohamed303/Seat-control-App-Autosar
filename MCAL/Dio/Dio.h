@@ -23,6 +23,11 @@
 /* Dio Pre-Compile Configuration Header file */
 #include "Dio_Cfg.h"
 
+#include "Dio_Regs.h"
+
+/* Non AUTOSAR files */
+#include "common_macros.h"
+
 /******************************************************************************
  *                      API Service Id Macros                                 *
  ******************************************************************************/
@@ -55,7 +60,6 @@
 
 
 
-
 /*******************************************************************************
  *                        DET Error Codes                                      *
  *******************************************************************************/
@@ -85,6 +89,8 @@ typedef uint8 Dio_ChannelType;
 /* Type definition of a port type, which consist of Numeric ID of a DIO port */
 typedef uint8 Dio_PortType;
 
+/* Type definition of a Dio Register Address ptr type, [pointer to take address of Port Reg address] */
+typedef volatile uint8* Dio_RegAddressPtrType;
 
 /* Type definition of a port type, which consist of the possible levels a DIO channel
  * can have (input or output)
@@ -94,7 +100,7 @@ typedef uint8 Dio_PortType;
 typedef uint8 Dio_LevelType;
 
 /* Type definition of a port level type, which consist of Numeric ID the largest port size
- * If the μC owns ports of different port widths (e.g. 4, 8,16...Bit)
+ * If the uC owns ports of different port widths (e.g. 4, 8,16...Bit)
  * Dio_PortLevelType inherits the size of the largest port.
  */
 typedef uint8 Dio_PortLevelType;
@@ -113,7 +119,12 @@ typedef struct
 
 }Dio_ChannelGroupType;
 
-
+typedef struct
+{
+	Dio_ChannelType channels[DIO_NUM_OF_CONFIGURED_CHANNLES];
+	Dio_PortType ports[DIO_NUM_OF_CONFIGURED_CHANNLES];
+	Dio_ChannelGroupType groups[DIO_NUM_OF_CONFIGURED_CHANNLES];
+}Dio_ConfigType;
 
 /*******************************************************************************
  *                      Function Prototypes                                    *
@@ -138,9 +149,15 @@ Dio_PortLevelType Dio_ReadChannelGroup(const Dio_ChannelGroupType* ChannelGroupI
 void Dio_WriteChannelGroup(const Dio_ChannelGroupType* ChannelGroupIdPtr, Dio_PortLevelType Level);
 
 /* Function Declaration for DIO get version info API */
-//void Dio_GetVersionInfo(Std_VersionInfoType* VersionInfo);
+void Dio_GetVersionInfo(Std_VersionInfoType* VersionInfo);
 
 /* Function Declaration for DIO flip channel API */
 Dio_LevelType Dio_FlipChannel(Dio_ChannelType ChannelId);
+
+/*******************************************************************************
+ *                       External Variables                                    *
+ *******************************************************************************/
+ extern const Dio_ConfigType Dio_Configurations;
+
 
 #endif

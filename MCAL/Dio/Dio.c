@@ -18,6 +18,15 @@
 /*******************************************************************************
  *                         Function Definitions                                *
  *******************************************************************************/
+static Dio_ChannelType Dio_getPinIndex(Dio_ChannelType pin_id)
+{
+	return (Dio_ChannelType)(pin_id%NUMBER_OF_CHANNELS_PER_PORT);
+}
+
+static Dio_PortType Dio_getPortID(Dio_ChannelType pin_id)
+{
+	return (Dio_PortType) ( (pin_id/NUMBER_OF_CHANNELS_PER_PORT) % (NUMBER_OF_PORTS) );
+}
 
 /************************************************************************************
 * Service Name: Dio_ReadChannel
@@ -32,7 +41,40 @@
 ************************************************************************************/
 Dio_LevelType Dio_ReadChannel(Dio_ChannelType ChannelId)
 {
+	Dio_RegAddressPtrType Port_Ptr;
+	Dio_ChannelType channelIndex;
+	Dio_PortType port;
+	Dio_LevelType result=0;
 
+	if(ChannelId>TOTAL_NUM_OF_PINS)
+	{
+		/* @TODO Raise Error */
+	}
+	else
+	{
+		/* Get Port ID */
+		port=Dio_getPortID(ChannelId);
+
+		/* Switch Case to update DDR_Ptr with the new addresses */
+		switch(port)
+		{
+		case DIO_PORTA_ID:	Port_Ptr =(Dio_RegAddressPtrType)PORTA_REG;
+			break;
+		case DIO_PORTB_ID:	Port_Ptr =(Dio_RegAddressPtrType)PORTB_REG;
+			break;
+		case DIO_PORTC_ID:	Port_Ptr =(Dio_RegAddressPtrType)PORTC_REG;
+			break;
+		case DIO_PORTD_ID:	Port_Ptr =(Dio_RegAddressPtrType)PORTD_REG;
+			break;
+		}
+
+		/* Get Channel index in The port */
+		channelIndex=Dio_getPinIndex(ChannelId);
+
+		/* Get Channel Reading */
+		result= (Dio_LevelType) GET_BIT(*Port_Ptr,channelIndex);
+	}
+	return result;
 }
 
 /************************************************************************************
@@ -49,7 +91,38 @@ Dio_LevelType Dio_ReadChannel(Dio_ChannelType ChannelId)
 ************************************************************************************/
 void Dio_WriteChannel(Dio_ChannelType ChannelId, Dio_LevelType Level)
 {
+	Dio_RegAddressPtrType Port_Ptr;
+		Dio_ChannelType channelIndex;
+		Dio_PortType port;
 
+		if(ChannelId>TOTAL_NUM_OF_PINS)
+		{
+			/* @TODO Raise Error */
+		}
+		else
+		{
+			/* Get Port ID */
+			port=Dio_getPortID(ChannelId);
+
+			/* Switch Case to update DDR_Ptr with the new addresses */
+			switch(port)
+			{
+			case DIO_PORTA_ID:	Port_Ptr =(Dio_RegAddressPtrType)PORTA_REG;
+				break;
+			case DIO_PORTB_ID:	Port_Ptr =(Dio_RegAddressPtrType)PORTB_REG;
+				break;
+			case DIO_PORTC_ID:	Port_Ptr =(Dio_RegAddressPtrType)PORTC_REG;
+				break;
+			case DIO_PORTD_ID:	Port_Ptr =(Dio_RegAddressPtrType)PORTD_REG;
+				break;
+			}
+
+			/* Get Channel index in The port */
+			channelIndex=Dio_getPinIndex(ChannelId);
+
+			/* Get Channel Reading */
+			SET_BIT(*Port_Ptr,Level);
+		}
 }
 
 /************************************************************************************
@@ -65,7 +138,37 @@ void Dio_WriteChannel(Dio_ChannelType ChannelId, Dio_LevelType Level)
 ************************************************************************************/
 Dio_PortLevelType Dio_ReadPort(Dio_PortType PortId)
 {
+	Dio_ChannelType NumOfChannels=0;
+	Dio_RegAddressPtrType DataReg_Ptr;
+	Dio_PortLevelType result;
 
+	if(PortId>NUMBER_OF_PORTS)
+	{
+
+	}
+	else
+	{
+		/* Get Number of channels based on Port & update DataReg_Ptr with the new address*/
+		switch(PortId)
+		{
+		case DIO_PORTA_ID: NumOfChannels = DIO_PORTA_NUM_OF_CHANNELS;
+						   DataReg_Ptr = (Dio_RegAddressPtrType)PINA_REG;
+			break;
+		case DIO_PORTB_ID: NumOfChannels = DIO_PORTB_NUM_OF_CHANNELS;
+						   DataReg_Ptr = (Dio_RegAddressPtrType)PINB_REG;
+			break;
+		case DIO_PORTC_ID: NumOfChannels = DIO_PORTC_NUM_OF_CHANNELS;
+		   	   	   	   	   DataReg_Ptr = (Dio_RegAddressPtrType)PINC_REG;
+			break;
+		case DIO_PORTD_ID: NumOfChannels = DIO_PORTD_NUM_OF_CHANNELS;
+		   	   	   	   	   DataReg_Ptr = (Dio_RegAddressPtrType)PIND_REG;
+			break;
+		}
+
+		result=*DataReg_Ptr;
+	}
+
+	return result;
 }
 
 /************************************************************************************
@@ -82,6 +185,34 @@ Dio_PortLevelType Dio_ReadPort(Dio_PortType PortId)
 ************************************************************************************/
 void Dio_WritePort(Dio_PortType PortId, Dio_PortLevelType Level)
 {
+	Dio_ChannelType NumOfChannels=0;
+	Dio_RegAddressPtrType DataReg_Ptr;
+
+	if(PortId>NUMBER_OF_PORTS)
+	{
+
+	}
+	else
+	{
+		/* Get Number of channels based on Port & update DataReg_Ptr with the new address*/
+		switch(PortId)
+		{
+		case DIO_PORTA_ID: NumOfChannels = DIO_PORTA_NUM_OF_CHANNELS;
+						   DataReg_Ptr = (Dio_RegAddressPtrType)PORTA_REG;
+			break;
+		case DIO_PORTB_ID: NumOfChannels = DIO_PORTB_NUM_OF_CHANNELS;
+						   DataReg_Ptr = (Dio_RegAddressPtrType)PORTB_REG;
+			break;
+		case DIO_PORTC_ID: NumOfChannels = DIO_PORTC_NUM_OF_CHANNELS;
+		   	   	   	   	   DataReg_Ptr = (Dio_RegAddressPtrType)PORTC_REG;
+			break;
+		case DIO_PORTD_ID: NumOfChannels = DIO_PORTD_NUM_OF_CHANNELS;
+		   	   	   	   	   DataReg_Ptr = (Dio_RegAddressPtrType)PORTD_REG;
+			break;
+		}
+
+		*DataReg_Ptr=Level;
+	}
 
 }
 
@@ -98,7 +229,40 @@ void Dio_WritePort(Dio_PortType PortId, Dio_PortLevelType Level)
 ************************************************************************************/
 Dio_PortLevelType Dio_ReadChannelGroup(const Dio_ChannelGroupType* ChannelGroupIdPtr)
 {
+	Dio_ChannelType NumOfChannels=0;
+	Dio_RegAddressPtrType DataReg_Ptr;
+	Dio_PortType PortId=ChannelGroupIdPtr->port;
+	uint8 mask= ChannelGroupIdPtr->mask;
+	//uint8 offset= ChannelGroupIdPtr->offset;
+	Dio_PortLevelType result;
 
+	if(PortId>NUMBER_OF_PORTS)
+	{
+
+	}
+	else
+	{
+		/* Get Number of channels based on Port & update DataReg_Ptr with the new address*/
+		switch(PortId)
+		{
+		case DIO_PORTA_ID: NumOfChannels = DIO_PORTA_NUM_OF_CHANNELS;
+						   DataReg_Ptr = (Dio_RegAddressPtrType)PINA_REG;
+			break;
+		case DIO_PORTB_ID: NumOfChannels = DIO_PORTB_NUM_OF_CHANNELS;
+						   DataReg_Ptr = (Dio_RegAddressPtrType)PINB_REG;
+			break;
+		case DIO_PORTC_ID: NumOfChannels = DIO_PORTC_NUM_OF_CHANNELS;
+		   	   	   	   	   DataReg_Ptr = (Dio_RegAddressPtrType)PINC_REG;
+			break;
+		case DIO_PORTD_ID: NumOfChannels = DIO_PORTD_NUM_OF_CHANNELS;
+		   	   	   	   	   DataReg_Ptr = (Dio_RegAddressPtrType)PIND_REG;
+			break;
+		}
+
+		result = (Dio_PortLevelType)(*DataReg_Ptr & mask);
+	}
+
+	return result;
 }
 
 /************************************************************************************
@@ -115,6 +279,37 @@ Dio_PortLevelType Dio_ReadChannelGroup(const Dio_ChannelGroupType* ChannelGroupI
 ************************************************************************************/
 void Dio_WriteChannelGroup(const Dio_ChannelGroupType* ChannelGroupIdPtr, Dio_PortLevelType Level)
 {
+	Dio_ChannelType NumOfChannels=0;
+	Dio_RegAddressPtrType DataReg_Ptr;
+	Dio_PortType PortId=ChannelGroupIdPtr->port;
+	uint8 mask= ChannelGroupIdPtr->mask;
+	uint8 offset= ChannelGroupIdPtr->offset;
+
+	if(PortId>NUMBER_OF_PORTS)
+	{
+
+	}
+	else
+	{
+		/* Get Number of channels based on Port & update DataReg_Ptr with the new address*/
+		switch(PortId)
+		{
+		case DIO_PORTA_ID: NumOfChannels = DIO_PORTA_NUM_OF_CHANNELS;
+						   DataReg_Ptr = (Dio_RegAddressPtrType)PORTA_REG;
+			break;
+		case DIO_PORTB_ID: NumOfChannels = DIO_PORTB_NUM_OF_CHANNELS;
+						   DataReg_Ptr = (Dio_RegAddressPtrType)PORTB_REG;
+			break;
+		case DIO_PORTC_ID: NumOfChannels = DIO_PORTC_NUM_OF_CHANNELS;
+						   DataReg_Ptr = (Dio_RegAddressPtrType)PORTC_REG;
+			break;
+		case DIO_PORTD_ID: NumOfChannels = DIO_PORTD_NUM_OF_CHANNELS;
+						   DataReg_Ptr = (Dio_RegAddressPtrType)PORTD_REG;
+			break;
+		}
+
+		*DataReg_Ptr = (Level<<offset) | (*DataReg_Ptr & (~mask));
+	}
 
 }
 
@@ -129,10 +324,10 @@ void Dio_WriteChannelGroup(const Dio_ChannelGroupType* ChannelGroupIdPtr, Dio_Po
 * Return value: None
 * Description: Function to Return the version information of this module.
 ************************************************************************************/
-//void Dio_GetVersionInfo(Std_VersionInfoType* VersionInfo)
-//{
-//
-//}
+void Dio_GetVersionInfo(Std_VersionInfoType* VersionInfo)
+{
+
+}
 
 
 /************************************************************************************
@@ -148,5 +343,7 @@ void Dio_WriteChannelGroup(const Dio_ChannelGroupType* ChannelGroupIdPtr, Dio_Po
 ************************************************************************************/
 Dio_LevelType Dio_FlipChannel(Dio_ChannelType ChannelId)
 {
+	Dio_LevelType result;
 
+	return result;
 }
