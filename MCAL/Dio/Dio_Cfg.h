@@ -15,14 +15,14 @@
 #define DioConf_LED1_CHANNEL_INDEX			0
 #define DioConf_LED2_CHANNEL_INDEX			1
 
-#define DioConf_LED1_CHANNEL_ID				DIO_ID_24
-#define DioConf_LED2_CHANNEL_ID				DIO_ID_25
+#define DioConf_LED1_CHANNEL_ID				DIO_ID_0
+#define DioConf_LED2_CHANNEL_ID				DIO_ID_1
 
 #define DioConf_LED1_PORT_INDEX				0
 #define DioConf_LED2_PORT_INDEX				1
 
-#define DioConf_LED1_PORT_ID				DIO_PORTD_ID
-#define DioConf_LED2_PORT_ID				DIO_PORTD_ID
+#define DioConf_LED1_PORT_ID				DIO_PORTA_ID
+#define DioConf_LED2_PORT_ID				DIO_PORTA_ID
 
 /*********************************************************************************
  * 						    PIN Definitions 								     *

@@ -117,9 +117,19 @@
                             							
                             <option id="de.innot.avreclipse.toolchain.options.toolchain.avrdude.app.debug.1259300594.971001686" name="AVRDude" superClass="de.innot.avreclipse.toolchain.options.toolchain.avrdude.app.debug.1259300594"/>
                             							
-                            <tool id="de.innot.avreclipse.tool.assembler.winavr.app.debug.1162087937" name="AVR Assembler" superClass="de.innot.avreclipse.tool.assembler.winavr.app.debug.1108222930"/>
+                            <targetPlatform id="de.innot.avreclipse.targetplatform.winavr.app.debug" name="AVR Cross-Target" superClass="de.innot.avreclipse.targetplatform.winavr.app.debug"/>
                             							
-                            <tool id="de.innot.avreclipse.tool.compiler.winavr.app.debug.301397855" name="AVR Compiler" superClass="de.innot.avreclipse.tool.compiler.winavr.app.debug.1868651220"/>
+                            <tool id="de.innot.avreclipse.tool.assembler.winavr.app.debug.1162087937" name="AVR Assembler" superClass="de.innot.avreclipse.tool.assembler.winavr.app.debug.1108222930">
+                                								
+                                <inputType id="de.innot.avreclipse.tool.assembler.input.1425352662" superClass="de.innot.avreclipse.tool.assembler.input"/>
+                                							
+                            </tool>
+                            							
+                            <tool id="de.innot.avreclipse.tool.compiler.winavr.app.debug.301397855" name="AVR Compiler" superClass="de.innot.avreclipse.tool.compiler.winavr.app.debug.1868651220">
+                                								
+                                <inputType id="de.innot.avreclipse.compiler.winavr.input.1362014718" name="C Source Files" superClass="de.innot.avreclipse.compiler.winavr.input"/>
+                                							
+                            </tool>
                             							
                             <tool id="de.innot.avreclipse.tool.cppcompiler.app.debug.677880561" name="AVR C++ Compiler" superClass="de.innot.avreclipse.tool.cppcompiler.app.debug.1388421647"/>
                             							

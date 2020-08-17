@@ -47,12 +47,14 @@ void Port_Init(const Port_ConfigType* ConfigPtr)
 {
 	Port_RegAddressPtrType Port_Ptr;
 	Port_RegAddressPtrType DDR_Ptr;
+	Port_PinType pinIndex;
 
 	/* Pointing to Channels Configuration in ConfigPtr by ConfiguredChannels pointer */
 	ConfiguredChannels=(Port_ConfigChannelType *)ConfigPtr->channels;
 
 	for(uint8 CH_itr=0 ; CH_itr<PORT_NUM_OF_CONFIGURED_CHANNLES ; CH_itr++)
 	{
+		pinIndex = Port_getPinIndex(ConfiguredChannels[CH_itr].pin);
 		/* Switch Case to update both Port_Ptr and DDR_Ptr with the new addresses */
 		switch(ConfiguredChannels[CH_itr].port)
 		{
@@ -78,31 +80,31 @@ void Port_Init(const Port_ConfigType* ConfigPtr)
 		switch(ConfiguredChannels[CH_itr].pinDirection)
 		{
 		case PORT_PIN_IN:
-			CLEAR_BIT(*DDR_Ptr,ConfiguredChannels[CH_itr].pin);
+			CLEAR_BIT(*DDR_Ptr,pinIndex);
 			if(ConfiguredChannels[CH_itr].pinPullupMode==PORT_PIN_ENABLE_PULLUP)
 			{
 				// Enable Internal Pull up by set Port Reg Pin
-				SET_BIT(*Port_Ptr,ConfiguredChannels[CH_itr].pin);
+				SET_BIT(*Port_Ptr,pinIndex);
 			}
 			else if(ConfiguredChannels[CH_itr].pinPullupMode==PORT_PIN_DISABLE_PULLUP)
 			{
 				// Enable Internal Pull up by clear Port Reg Pin
-				CLEAR_BIT(*Port_Ptr,ConfiguredChannels[CH_itr].pin);
+				CLEAR_BIT(*Port_Ptr,pinIndex);
 			}
 			else
 			{}
 			break;
 		case PORT_PIN_OUT:
-			SET_BIT(*DDR_Ptr,ConfiguredChannels[CH_itr].pin);
-			if(ConfiguredChannels[CH_itr].pinPullupMode==PORT_PIN_INITIAL_HIGH)
+			SET_BIT(*DDR_Ptr,pinIndex);
+			if(ConfiguredChannels[CH_itr].pinInitLevel==PORT_PIN_INITIAL_HIGH)
 			{
 				// Initialize The Port Register Pin level with 1
-				SET_BIT(*Port_Ptr,ConfiguredChannels[CH_itr].pin);
+				SET_BIT(*Port_Ptr,pinIndex);
 			}
-			else if(ConfiguredChannels[CH_itr].pinPullupMode==PORT_PIN_INITIAL_LOW)
+			else if(ConfiguredChannels[CH_itr].pinInitLevel==PORT_PIN_INITIAL_LOW)
 			{
 				// Initialize The Port Register Pin level with 0
-				CLEAR_BIT(*Port_Ptr,ConfiguredChannels[CH_itr].pin);
+				CLEAR_BIT(*Port_Ptr,pinIndex);
 			}
 			else
 			{}

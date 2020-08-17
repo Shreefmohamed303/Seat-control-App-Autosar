@@ -12,7 +12,7 @@
  *
  ******************************************************************************/
 
-#include "Port.h"
+#include "Spi.h"
 
 const Port_ConfigType Port_Configurations =
 {

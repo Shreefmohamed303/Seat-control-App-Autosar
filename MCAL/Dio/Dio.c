@@ -58,13 +58,13 @@ Dio_LevelType Dio_ReadChannel(Dio_ChannelType ChannelId)
 		/* Switch Case to update DDR_Ptr with the new addresses */
 		switch(port)
 		{
-		case DIO_PORTA_ID:	Port_Ptr =(Dio_RegAddressPtrType)PORTA_REG;
+		case DIO_PORTA_ID:	Port_Ptr =(Dio_RegAddressPtrType)PINA_REG;
 			break;
-		case DIO_PORTB_ID:	Port_Ptr =(Dio_RegAddressPtrType)PORTB_REG;
+		case DIO_PORTB_ID:	Port_Ptr =(Dio_RegAddressPtrType)PINB_REG;
 			break;
-		case DIO_PORTC_ID:	Port_Ptr =(Dio_RegAddressPtrType)PORTC_REG;
+		case DIO_PORTC_ID:	Port_Ptr =(Dio_RegAddressPtrType)PINC_REG;
 			break;
-		case DIO_PORTD_ID:	Port_Ptr =(Dio_RegAddressPtrType)PORTD_REG;
+		case DIO_PORTD_ID:	Port_Ptr =(Dio_RegAddressPtrType)PIND_REG;
 			break;
 		}
 
@@ -92,37 +92,43 @@ Dio_LevelType Dio_ReadChannel(Dio_ChannelType ChannelId)
 void Dio_WriteChannel(Dio_ChannelType ChannelId, Dio_LevelType Level)
 {
 	Dio_RegAddressPtrType Port_Ptr;
-		Dio_ChannelType channelIndex;
-		Dio_PortType port;
+	Dio_ChannelType channelIndex;
+	Dio_PortType port;
 
-		if(ChannelId>TOTAL_NUM_OF_PINS)
+	if(ChannelId>TOTAL_NUM_OF_PINS)
+	{
+		/* @TODO Raise Error */
+	}
+	else
+	{
+		/* Get Port ID */
+		port=Dio_getPortID(ChannelId);
+
+		/* Switch Case to update DDR_Ptr with the new addresses */
+		switch(port)
 		{
-			/* @TODO Raise Error */
+		case DIO_PORTA_ID:	Port_Ptr =(Dio_RegAddressPtrType)PORTA_REG;
+			break;
+		case DIO_PORTB_ID:	Port_Ptr =(Dio_RegAddressPtrType)PORTB_REG;
+			break;
+		case DIO_PORTC_ID:	Port_Ptr =(Dio_RegAddressPtrType)PORTC_REG;
+			break;
+		case DIO_PORTD_ID:	Port_Ptr =(Dio_RegAddressPtrType)PORTD_REG;
+			break;
 		}
-		else
+
+		/* Get Channel index in The port */
+		channelIndex=Dio_getPinIndex(ChannelId);
+
+		/* Set Channel Level */
+		switch(Level)
 		{
-			/* Get Port ID */
-			port=Dio_getPortID(ChannelId);
-
-			/* Switch Case to update DDR_Ptr with the new addresses */
-			switch(port)
-			{
-			case DIO_PORTA_ID:	Port_Ptr =(Dio_RegAddressPtrType)PORTA_REG;
-				break;
-			case DIO_PORTB_ID:	Port_Ptr =(Dio_RegAddressPtrType)PORTB_REG;
-				break;
-			case DIO_PORTC_ID:	Port_Ptr =(Dio_RegAddressPtrType)PORTC_REG;
-				break;
-			case DIO_PORTD_ID:	Port_Ptr =(Dio_RegAddressPtrType)PORTD_REG;
-				break;
-			}
-
-			/* Get Channel index in The port */
-			channelIndex=Dio_getPinIndex(ChannelId);
-
-			/* Get Channel Reading */
-			SET_BIT(*Port_Ptr,Level);
+		case STD_HIGH: 	SET_BIT(*Port_Ptr,channelIndex);
+			break;
+		case STD_LOW: 	CLEAR_BIT(*Port_Ptr,channelIndex);
+			break;
 		}
+	}
 }
 
 /************************************************************************************
